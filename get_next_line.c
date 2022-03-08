@@ -6,80 +6,113 @@
 /*   By: kvodorez <kvodorez@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/24 18:49:01 by kvodorez      #+#    #+#                 */
-/*   Updated: 2022/01/31 19:42:54 by kvodorez      ########   odam.nl         */
+/*   Updated: 2022/03/08 18:28:14 by kvodorez      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*check_remainder(char *remainder, char **line)
+char	*get_remainder(char *saved_line)
 {
 	char	*p_n;
+	char	*remainder;
+	int		counter;
+	char	*tmp;
 
-	p_n = NULL;
-	if (remainder)
+	counter = 0;
+	p_n = ft_strchr(saved_line, '\n');
+	free(saved_line);
+	if (!p_n)
+		return (NULL);
+	tmp = malloc(ft_strlen(p_n));
+	if (!tmp)
+		return (NULL);
+	p_n++;
+	while (*p_n)
 	{
-		p_n = ft_strchr(remainder, '\n');
-		if (p_n)
-		{
-			*p_n = '\0';
-			*line = ft_strdup(remainder);
-			p_n++;
-			while (*p_n)
-			{
-				*remainder = *p_n;
-				p_n++;
-			}
-			*remainder = '\0';
-		}
-		*line = ft_strdup(remainder);
-		while (*remainder)
-		{
-			*remainder = '\0';
-			remainder++;
-		}
+		*tmp = *p_n;
+		p_n++;
+		tmp++;
+		counter++;
 	}
-	else
-		**line = '\0';
-	return (p_n);
+	*tmp = '\0';
+	remainder = tmp;
+	return (&remainder[-counter]);
 }
 
-int	get_next_line(int fd, char **line) //1, 0 , -1
+char	*trim_line(char *saved_line)
 {
-	char		buf[10 + 1];
-	int			nbytesread;
-	char		*p_n;
-	static char	*remainder;
-	char		*tmp;
+	char	*cut_line;
+	int		i;
 
-	p_n = check_remainder(remainder, line);
-	while (!p_n && (nbytesread = read(fd, buf, 10)))
+	i = 0;
+	if (ft_strchr(saved_line, '\n') == NULL)
+		return (saved_line);
+	while ((saved_line[i] != '\0') && (saved_line[i] != '\n'))
+		i++;
+	cut_line = malloc(i + 2);
+	if (!cut_line)
 	{
-		buf[nbytesread] = '\0';
-		p_n = ft_strchr(buf, '\n');
-		if (p_n)
-		{
-			*p_n = '\0';
-			p_n++;
-			remainder = ft_strdup(p_n);
-		}
-		tmp = *line;
-		*line = ft_strjoin(*line, buf);
-		free(tmp);
+		free(saved_line);
+		return (NULL);
 	}
-	if (nbytesread|| ft_strlen(remainder) || ft_strlen(*line))
-		return (1);
-	else
-		return (0);
+	while ((*saved_line) && (*saved_line != '\n'))
+	{
+		*cut_line = *saved_line;
+		saved_line++;
+		cut_line++;
+	}
+	if (*saved_line == '\n')
+		*cut_line++ = '\n';
+	*cut_line = '\0';
+	return (&cut_line[-i - 1]);
 }
 
-int	main(void)
+char	*read_full_line(int fd, char *saved_line, char *buff)
 {
-	char	*line;
-	int		fd;
+	int		nbytesread;
+	char	*tmp;
 
-	fd = open("easter_lyrics.txt", O_RDONLY);
-	get_next_line(fd, &line);
-	//printf("%s\n", line);
+	nbytesread = 1;
+	tmp = NULL;
+	while (nbytesread > 0)
+	{
+		nbytesread = read(fd, buff, BUFFER_SIZE);
+		if (nbytesread < 0)
+			return (NULL);
+		buff[nbytesread] = '\0';
+		if (!saved_line)
+			saved_line = ft_strdup(buff);
+		else
+		{
+			tmp = ft_strjoin(saved_line, buff);
+			saved_line = tmp;
+		}
+		if (!saved_line)
+			return (NULL);
+		if (ft_strchr(saved_line, '\n'))
+			break ;
+	}
+	if (saved_line[0] == '\0')
+	{
+		free(saved_line);
+		return (NULL);
+	}
+	return (saved_line);
 }
- 
+
+char	*get_next_line(int fd)
+{
+	char		buff[BUFFER_SIZE + 1];
+	static char	*saved_line;
+	char		*cut_line;
+
+	if (fd < 0 || BUFFER_SIZE < 1)
+		return (NULL);
+	saved_line = read_full_line(fd, saved_line, buff);
+	if (!saved_line)
+		return (NULL);
+	cut_line = trim_line(saved_line);
+	saved_line = get_remainder(saved_line);
+	return (cut_line);
+}
