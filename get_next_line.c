@@ -6,7 +6,7 @@
 /*   By: kvodorez <kvodorez@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/24 18:49:01 by kvodorez      #+#    #+#                 */
-/*   Updated: 2022/03/08 18:28:14 by kvodorez      ########   odam.nl         */
+/*   Updated: 2022/03/08 19:39:38 by kvodorez      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ char	*get_remainder(char *saved_line)
 
 	counter = 0;
 	p_n = ft_strchr(saved_line, '\n');
-	free(saved_line);
 	if (!p_n)
 		return (NULL);
 	tmp = malloc(ft_strlen(p_n));
@@ -37,6 +36,7 @@ char	*get_remainder(char *saved_line)
 	}
 	*tmp = '\0';
 	remainder = tmp;
+	free(saved_line);
 	return (&remainder[-counter]);
 }
 
