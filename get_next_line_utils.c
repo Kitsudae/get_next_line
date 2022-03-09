@@ -6,7 +6,7 @@
 /*   By: kvodorez <kvodorez@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/25 16:54:14 by kvodorez      #+#    #+#                 */
-/*   Updated: 2022/03/08 17:47:27 by kvodorez      ########   odam.nl         */
+/*   Updated: 2022/03/09 17:11:36 by kvodorez      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ size_t	ft_strlen(const char *s)
 
 	i = 0;
 	while (s[i] != 0)
-		i ++;
+		i++;
 	return (i);
 }
 
@@ -75,8 +75,16 @@ char	*ft_strjoin(char *s1, char *s2)
 	str = malloc(len + 1);
 	if (!str)
 		return (NULL);
-	ft_strcpy(str, s1);
-	ft_strcpy(str + ft_strlen(str), s2);
+	*str = '\0';
+	// if (len == 0)
+	// 	str[0] = '\0';
+	// if (len == 0)
+	// 	str[0] = s2[0];
+	if (len > 0)
+	{	
+		ft_strcpy(str, s1);
+		ft_strcpy(str + ft_strlen(str), s2);
+	}
 	free(s1);
 	return (str);
 }

@@ -6,14 +6,14 @@
 /*   By: kvodorez <kvodorez@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/27 18:40:50 by kvodorez      #+#    #+#                 */
-/*   Updated: 2022/03/08 19:20:24 by kvodorez      ########   odam.nl         */
+/*   Updated: 2022/03/09 17:06:18 by kvodorez      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-# define BUFFER_SIZE  11
+//# define BUFFER_SIZE  1
 
 # include <stdlib.h>
 # include <stdio.h>
