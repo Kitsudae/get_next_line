@@ -6,7 +6,7 @@
 /*   By: kvodorez <kvodorez@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/25 16:54:14 by kvodorez      #+#    #+#                 */
-/*   Updated: 2022/03/09 17:11:36 by kvodorez      ########   odam.nl         */
+/*   Updated: 2022/03/10 22:23:33 by kvodorez      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-char	*ft_strdup(const char *s1)
+char	*ft_strdup(char *s1)
 {
 	char	*ptr;
 	size_t	len;
@@ -31,7 +31,10 @@ char	*ft_strdup(const char *s1)
 	len = ft_strlen(s1);
 	ptr = malloc(len + 1);
 	if (!ptr)
+	{
+		free(ptr);
 		return (NULL);
+	}
 	i = 0;
 	while (i < len)
 	{
@@ -74,12 +77,11 @@ char	*ft_strjoin(char *s1, char *s2)
 		len = ft_strlen(s1) + ft_strlen(s2);
 	str = malloc(len + 1);
 	if (!str)
+	{
+		free(s1);
 		return (NULL);
+	}
 	*str = '\0';
-	// if (len == 0)
-	// 	str[0] = '\0';
-	// if (len == 0)
-	// 	str[0] = s2[0];
 	if (len > 0)
 	{	
 		ft_strcpy(str, s1);

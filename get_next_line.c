@@ -6,7 +6,7 @@
 /*   By: kvodorez <kvodorez@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/24 18:49:01 by kvodorez      #+#    #+#                 */
-/*   Updated: 2022/03/09 17:08:14 by kvodorez      ########   odam.nl         */
+/*   Updated: 2022/03/10 22:30:31 by kvodorez      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,10 @@ char	*get_remainder(char *saved_line)
 		return (NULL);
 	tmp = malloc(ft_strlen(p_n));
 	if (!tmp)
+	{
+		free(saved_line);
 		return (NULL);
+	}
 	p_n++;
 	while (*p_n)
 	{
@@ -53,7 +56,7 @@ char	*trim_line(char *saved_line)
 	cut_line = malloc(i + 2);
 	if (!cut_line)
 	{
-		free(saved_line);
+		//free(saved_line);
 		return (NULL);
 	}
 	while ((*saved_line) && (*saved_line != '\n'))
@@ -103,9 +106,9 @@ char	*read_full_line(int fd, char *saved_line, char *buff)
 
 char	*get_next_line(int fd)
 {
-	char		buff[BUFFER_SIZE + 1];
-	static char	*saved_line;
-	char		*cut_line;
+	char			buff[BUFFER_SIZE + 1];
+	static char		*saved_line;
+	char			*cut_line;
 
 	if (fd < 0 || BUFFER_SIZE < 1)
 		return (NULL);
