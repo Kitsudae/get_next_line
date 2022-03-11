@@ -6,11 +6,17 @@
 /*   By: kvodorez <kvodorez@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/24 18:49:01 by kvodorez      #+#    #+#                 */
-/*   Updated: 2022/03/10 22:30:31 by kvodorez      ########   odam.nl         */
+/*   Updated: 2022/03/11 16:28:31 by kvodorez      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+char	*ft_free(char *str)
+{
+	free(str);
+	return (NULL);
+}
 
 char	*get_remainder(char *saved_line)
 {
@@ -25,10 +31,7 @@ char	*get_remainder(char *saved_line)
 		return (NULL);
 	tmp = malloc(ft_strlen(p_n));
 	if (!tmp)
-	{
-		free(saved_line);
-		return (NULL);
-	}
+		return (ft_free(saved_line));
 	p_n++;
 	while (*p_n)
 	{
@@ -55,10 +58,7 @@ char	*trim_line(char *saved_line)
 		i++;
 	cut_line = malloc(i + 2);
 	if (!cut_line)
-	{
-		//free(saved_line);
 		return (NULL);
-	}
 	while ((*saved_line) && (*saved_line != '\n'))
 	{
 		*cut_line = *saved_line;
@@ -77,7 +77,6 @@ char	*read_full_line(int fd, char *saved_line, char *buff)
 	char	*tmp;
 
 	nbytesread = 1;
-	tmp = NULL;
 	while (nbytesread > 0)
 	{
 		nbytesread = read(fd, buff, BUFFER_SIZE);
@@ -97,10 +96,7 @@ char	*read_full_line(int fd, char *saved_line, char *buff)
 			break ;
 	}
 	if (saved_line[0] == '\0')
-	{
-		free(saved_line);
-		return (NULL);
-	}
+		return (ft_free(saved_line));
 	return (saved_line);
 }
 
